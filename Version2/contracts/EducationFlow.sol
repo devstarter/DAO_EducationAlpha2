@@ -15,10 +15,13 @@ interface IERC20 {
     function approve(address spender, uint amount) external;
     function allowance(address owner, address spender) external view returns(uint256);
 }
+// why you do not want to include openzeppelin IERC20?
 
 // Start of the smart contract for DAO education platform
 // This version supprots only one round of quadraticFounring
 contract EducationPlatform is Ownable {
+// я бы добавил еще https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/security/Pausable.sol 
+// чтобы можно было поставить смарт на паузу если что-то пошло не так :)
 
     using Counters for Counters.Counter;
     
@@ -41,6 +44,7 @@ contract EducationPlatform is Ownable {
 
     struct Expert { //this is Expert
         address expertAddress;
+        
         string expertName;
         uint expertId;
         uint votes;
@@ -141,6 +145,7 @@ contract EducationPlatform is Ownable {
         expertById[_id].balance+= _amount;
         userDonation[_msgSender()][_id].isDonated = true;
         userDonation[_msgSender()][_id].amountOfDonations+= _amount;
+        // in this function you call _msgSender() many times, it is gas expensive, use local variable 
     }
 
 
